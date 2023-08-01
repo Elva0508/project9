@@ -4,11 +4,12 @@ import { useNavigate } from "react-router-dom";
 import AuthService from "../services/auth-service";
 
 const RegisterComponent = () => {
-  const navigate = useNavigate() 
+  const navigate = useNavigate();
   let [username, setUsername] = useState("");
   let [email, setEmail] = useState("");
   let [password, setPassword] = useState("");
   let [role, setRole] = useState("");
+  let [message, setMessage] = useState("");
   const handleUsername = (e) => {
     setUsername(e.target.value);
   };
@@ -21,19 +22,22 @@ const RegisterComponent = () => {
   const handleRole = (e) => {
     setRole(e.target.value);
   };
-  const handleRigister = () => {
-    AuthService(username, email, password, role)
-      .then(() => {
-        window.alert("註冊成功，您將被導向登入頁面");
-        navigate("/login")
+  const handleRegister = () => {
+    AuthService.register(username, email, password, role)
+      .then((data) => {
+        alert("成功註冊，將為您導向登入畫面");
+        navigate("/login");
       })
       .catch((e) => {
         console.log(e);
+        setMessage(e.response.data); //如果有抓到錯誤的話就將msg存進message變數內
       });
   };
   return (
     <div style={{ padding: "3rem" }} className="col-md-12">
       <div>
+        {/* 顯示錯誤訊息的block */}
+        {message && <div className="alert alert-danger">{message}</div>}
         <div>
           <label htmlFor="username">用戶名稱:</label>
           <input
@@ -76,12 +80,11 @@ const RegisterComponent = () => {
           />
         </div>
         <br />
-        <button onClick className="btn btn-primary">
+        <button onClick={handleRegister} className="btn btn-primary">
           <span>註冊會員</span>
         </button>
       </div>
     </div>
   );
 };
-
 export default RegisterComponent;

@@ -34,6 +34,16 @@ router.get("/:_id", async (req, res) => {
     return res.status(500).send(e);
   }
 });
+
+//用講師id來尋找該講師所有創建的課程
+router.get("/teacher/:teacher_id", async (req, res) => {
+  let { teacher_id } = req.params;
+  let coursesFound = Course.find({ teacher: teacher_id })
+    .populate("teacher", ["username", "email"])
+    .exec();
+  return res.send("coursesFound");
+});
+
 router.post("/", async (req, res) => {
   //新增課程的route
   // 驗證發布新課程的數據是否符合Joi規範

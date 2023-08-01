@@ -1,5 +1,12 @@
-const ProfileComponent = (props) => {
-  let { currentUser, setCurrentUser } = props;
+import { useState, useEffect, useContext, createContext } from "react";
+import AuthService from "../services/auth-service";
+import CurrentUserContext from "../CurrentUser-context";
+
+const ProfileComponent = () => {
+  const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
+  useEffect(() => {
+    setCurrentUser(AuthService.getCurrentUser());
+  }, []); //這段程式碼意思是當我們第一次渲染profile頁面時，執行setCurrentUser，將localStorage儲存的使用者資訊儲存到CurrentUser變數內，也就是說如果CurrentUser不存在的話就代表使用者未登錄(localStorage內沒有資料)，則不能看到profile的內容
 
   return (
     <div style={{ padding: "3rem" }}>

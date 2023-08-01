@@ -4,12 +4,23 @@ import axios from "axios";
 const API_URL = "http://localhost:8080/api/user"; //用來連結sever端的網域，將其存為一個變數，這樣之後若要修改server的網域就不用大費周章每個request都要修改了
 
 class AuthService {
-  login() {}
-  logout() {}
-  register(uesrname,email,password,role) {
-    return axios.post(API_URL+"/register"),{
-      uesrname,email,password,role
-    }
+  login(email, password) {
+    return axios.post(API_URL + "/login", { email, password });
+  }
+  logout() {
+    localStorage.removeItem("user"); //登出後就移除儲存在localStorage的使用者資料
+  }
+  register(username, email, password, role) {
+    return axios.post(API_URL + "/register", {
+      username,
+      email,
+      password,
+      role,
+    });
+  }
+  getCurrentUser() {
+    //功能是將localStorage儲存的JSON使用者資料轉回js物件並return
+    return JSON.parse(localStorage.getItem("user"));
   }
 } //製作一個class裡面放method
 export default new AuthService();
