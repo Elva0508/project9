@@ -6,6 +6,10 @@ const API_URL = "http://localhost:8080/api/user"; //用來連結sever端的網�
 class AuthService {
   login() {}
   logout() {}
-  register() {}
+  register(uesrname,email,password,role) {
+    return axios.post(API_URL+"/register"),{
+      uesrname,email,password,role
+    }
+  }
 } //製作一個class裡面放method
 export default new AuthService();

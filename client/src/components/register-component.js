@@ -1,13 +1,43 @@
 import React, { useState } from "react";
+//這是一個hook可以用來做重新導向
+import { useNavigate } from "react-router-dom";
+import AuthService from "../services/auth-service";
 
 const RegisterComponent = () => {
+  const navigate = useNavigate() 
+  let [username, setUsername] = useState("");
+  let [email, setEmail] = useState("");
+  let [password, setPassword] = useState("");
+  let [role, setRole] = useState("");
+  const handleUsername = (e) => {
+    setUsername(e.target.value);
+  };
+  const handleEmail = (e) => {
+    setEmail(e.target.value);
+  };
+  const handlePassword = (e) => {
+    setPassword(e.target.value);
+  };
+  const handleRole = (e) => {
+    setRole(e.target.value);
+  };
+  const handleRigister = () => {
+    AuthService(username, email, password, role)
+      .then(() => {
+        window.alert("註冊成功，您將被導向登入頁面");
+        navigate("/login")
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
   return (
     <div style={{ padding: "3rem" }} className="col-md-12">
       <div>
         <div>
           <label htmlFor="username">用戶名稱:</label>
           <input
-            onChange
+            onChange={handleUsername}
             type="text"
             className="form-control"
             name="username"
@@ -16,13 +46,18 @@ const RegisterComponent = () => {
         <br />
         <div className="form-group">
           <label htmlFor="email">電子信箱：</label>
-          <input onChange type="text" className="form-control" name="email" />
+          <input
+            onChange={handleEmail}
+            type="text"
+            className="form-control"
+            name="email"
+          />
         </div>
         <br />
         <div className="form-group">
           <label htmlFor="password">密碼：</label>
           <input
-            onChange
+            onChange={handlePassword}
             type="password"
             className="form-control"
             name="password"
@@ -33,7 +68,7 @@ const RegisterComponent = () => {
         <div className="form-group">
           <label htmlFor="password">身份：</label>
           <input
-            onChange
+            onChange={handleRole}
             type="text"
             className="form-control"
             placeholder="只能填入student或是instructor這兩個選項其一"
