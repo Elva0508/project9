@@ -5,6 +5,8 @@ import RegisterComponent from "./components/register-component";
 import LoginComponent from "./components/login-component";
 import ProfileComponent from "./components/profile-component";
 import CourseComponent from "./components/course-component";
+import PostCourseComponent from "./components/postCourse-component"
+import EnrollCourseComponent from "./components/enrollCourse-component"
 function App() {
   return (
     <BrowserRouter>
@@ -15,6 +17,8 @@ function App() {
           <Route path="login" element={<LoginComponent />}></Route>
           <Route path="profile" element={<ProfileComponent />}></Route>
           <Route path="course" element={<CourseComponent />}></Route>
+          <Route path="postCourse" element={<PostCourseComponent />}></Route>
+          <Route path="enrollCourse" element={<EnrollCourseComponent />}></Route>
         </Route>
       </Routes>
     </BrowserRouter>

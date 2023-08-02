@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState,useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import CourseService from "../services/course.service";
+import CourseService from "../services/course-service";
+import CurrentUserContext from "../CurrentUser-context";
 
-const PostCourseComponent = (props) => {
-  let { currentUser, setCurrentUser } = props;
+const PostCourseComponent = () => {
+  let { currentUser, setCurrentUser } = useContext(CurrentUserContext);
   let [title, setTitle] = useState("");
   let [description, setDescription] = useState("");
   let [price, setPrice] = useState(0);
@@ -39,19 +40,19 @@ const PostCourseComponent = (props) => {
         <div>
           <p>在發布新課程之前，您必須先登錄。</p>
           <button
-            className="btn btn-primary btn-lg"
+            className="btn btn-primary btn-md"
             onClick={handleTakeToLogin}
           >
             帶我進入登錄頁面。
           </button>
         </div>
       )}
-      {currentUser && currentUser.user.role !== "instructor" && (
+      {currentUser && currentUser.user.role !== "teacher" && (
         <div>
           <p>只有講師可以發布新課程。</p>
         </div>
       )}
-      {currentUser && currentUser.user.role == "instructor" && (
+      {currentUser && currentUser.user.role == "teacher" && (
         <div className="form-group">
           <label for="exampleforTitle">課程標題：</label>
           <input

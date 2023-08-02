@@ -38,10 +38,28 @@ router.get("/:_id", async (req, res) => {
 //用講師id來尋找該講師所有創建的課程
 router.get("/teacher/:teacher_id", async (req, res) => {
   let { teacher_id } = req.params;
-  let coursesFound = Course.find({ teacher: teacher_id })
+  let coursesFound = await Course.find({ teacher: teacher_id })
     .populate("teacher", ["username", "email"])
     .exec();
-  return res.send("coursesFound");
+  return res.send(coursesFound);
+});
+
+//用學生id來尋找該學生所有註冊過的課程
+router.get("/student/:student_id", async (req, res) => {
+  let { student_id } = req.params;
+  let coursesFound = await Course.find({ student: student_id })
+    .populate("teacher", ["username", "email"])
+    .exec();
+  return res.send(coursesFound);
+});
+
+//用課程名稱尋找特定的課程
+router.get("/findByname/:name", async (req, res) => {
+  let { name } = req.params;
+  let courseFound = await Course.find({ title: name })
+    .populate("teacher", ["username", "email"])
+    .exec();
+  return res.send(courseFound);
 });
 
 router.post("/", async (req, res) => {
@@ -66,6 +84,30 @@ router.post("/", async (req, res) => {
     res.send({ message: "新課程已經保存", savedCourse });
   } catch (e) {
     return res.status(500).send("無法創建課程");
+  }
+});
+
+//讓學生透過課程id註冊新課程
+router.post("/enroll/:_id", async (req, res) => {
+  let { _id } = req.params;
+  try {
+    let course = await Course.findOne({ _id });
+    //找到course後，將當前使用者(req.user._id)加入到該course的student屬性內(使用arr.push method將使用者推入student array中)，表示已註冊該課程，再將修改過的course save到資料庫內
+
+    // course.student.push(localStorage.user._id); 題外話，不可以使用這個寫法，因為node.js後端環境不存在localStorage!!
+    const result = course.student.some((student) => {
+      return student == req.user._id;
+    });
+    //確認使用者是否註冊過該課程，如果註冊過則不再將其加入student array
+    if (result) {
+      return res.send("您已註冊過該課程");
+    } else {
+      course.student.push(req.user._id);
+      await course.save();
+      res.send("註冊完成");
+    }
+  } catch (e) {
+    res.send(e);
   }
 });
 router.patch("/:_id", async (req, res) => {

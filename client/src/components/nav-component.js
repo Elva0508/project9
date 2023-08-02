@@ -69,7 +69,7 @@ const NavComponent = () => {
 
                 {currentUser && currentUser.user.role == "student" && (
                   <li className="nav-item">
-                    <Link className="nav-link" to="/enroll">
+                    <Link className="nav-link" to="/enrollCourse">
                       註冊課程
                     </Link>
                   </li>

@@ -35,5 +35,5 @@ app.use(
 
 //不要使用3000，因為3000是react預設的port，不能用相同的
 app.listen(8080, () => {
-  console.log("port3000聆聽中。。。");
+  console.log("port8080聆聽中。。。");
 });
